@@ -105,11 +105,12 @@
     const type = block.querySelector('.q-type').value;
     if (type !== 'mcq') return;
     const optionsContainer = block.querySelector('.options-container');
-    const qIndex = Array.from(questionsContainer.children).indexOf(block);
+    // Use the unique question identifier for the radio name so options remain grouped
+    const qName = block.dataset.qid || Array.from(questionsContainer.children).indexOf(block);
     const optionDiv = document.createElement('div');
     optionDiv.className = 'option-input';
     optionDiv.innerHTML = `
-      <input type="radio" name="correct_${qIndex}">
+      <input type="radio" name="correct_${qName}">
       <input type="text" class="option-text" required>
       <button type="button" class="button remove-option">Remove</button>
     `;
