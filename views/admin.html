@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Create Quiz</title>
+  <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+  <header>
+    <h1>Create a New Quiz</h1>
+    <nav><a href="/">Back to home</a></nav>
+  </header>
+  <main>
+    <form id="quiz-form">
+      <div class="form-group">
+        <label for="quiz-title">Quiz Title</label>
+        <input type="text" id="quiz-title" required placeholder="Enter quiz title">
+      </div>
+      <div id="questions" class="questions-container"></div>
+      <button type="button" id="add-question" class="button">Add Question</button>
+      <button type="submit" class="button primary">Save Quiz</button>
+    </form>
+    <div id="message" class="message"></div>
+  </main>
+  <script src="/public/admin.js"></script>
+</body>
+</html>

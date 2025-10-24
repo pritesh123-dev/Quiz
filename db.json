@@ -1,0 +1,33 @@
+{
+  "quizzes": [
+    {
+      "id": "quiz_1761301344605",
+      "title": "Sample Quiz",
+      "questions": [
+        {
+          "type": "mcq",
+          "question": "What is 2+2?",
+          "options": [
+            "3",
+            "4",
+            "5"
+          ],
+          "answer": "4",
+          "id": "q1"
+        },
+        {
+          "type": "tf",
+          "question": "Earth is round?",
+          "answer": "true",
+          "id": "q2"
+        },
+        {
+          "type": "text",
+          "question": "Capital of India?",
+          "answer": "New Delhi",
+          "id": "q3"
+        }
+      ]
+    }
+  ]
+}
