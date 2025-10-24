@@ -1,22 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Management System</title>
   <link rel="stylesheet" href="/public/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>Quiz Management System</h1>
+    <h1>🎯 Quiz Management System</h1>
     <nav>
-      <a href="/admin">Create a new quiz</a>
+      <a href="/admin">➕ Create New Quiz</a>
     </nav>
   </header>
   <main>
-    <h2>Available Quizzes</h2>
+    <div class="hero-section">
+      <h2>📚 Available Quizzes</h2>
+      <p>Choose a quiz below to test your knowledge and challenge yourself!</p>
+    </div>
     <ul class="quiz-list">
       {{quizList}}
     </ul>
+    <div class="empty-state" style="display: none;">
+      <div class="empty-icon">📝</div>
+      <h3>No quizzes available yet</h3>
+      <p>Be the first to create an amazing quiz!</p>
+      <a href="/admin" class="button primary">Create Your First Quiz</a>
+    </div>
   </main>
+  <footer>
+    <p>&copy; 2024 Quiz Management System. Built with ❤️ for learning.</p>
+  </footer>
 </body>
 </html>

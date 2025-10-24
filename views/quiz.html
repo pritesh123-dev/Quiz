@@ -1,20 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{{quizTitle}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{quizTitle}} - Quiz</title>
   <link rel="stylesheet" href="/public/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>{{quizTitle}}</h1>
-    <nav><a href="/">Back to home</a></nav>
+    <h1>🎯 {{quizTitle}}</h1>
+    <nav><a href="/">🏠 Back to Home</a></nav>
   </header>
   <main>
+    <div class="quiz-intro">
+      <h2>📝 Ready to Test Your Knowledge?</h2>
+      <p>Answer all questions below and submit when you're ready. Good luck! 🍀</p>
+      <div class="progress-indicator">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p class="progress-text" id="progress-text">0 of 0 questions answered</p>
+      </div>
+    </div>
     <form action="/api/quiz/{{quizId}}" method="post" class="quiz-form">
       {{quizContent}}
-      <button type="submit" class="button primary">Submit Answers</button>
+      <div class="submit-section">
+        <button type="submit" class="button primary">🚀 Submit Answers</button>
+        <p class="submit-note">Make sure you've answered all questions before submitting!</p>
+      </div>
     </form>
   </main>
+  <script>
+    // Add some interactivity
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('.quiz-form');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      
+      // Add confirmation before submit
+      form.addEventListener('submit', function(e) {
+        // Check for unanswered questions
+        const questions = form.querySelectorAll('.question');
+        let unansweredCount = 0;
+        
+        questions.forEach((question, index) => {
+          const radioInputs = question.querySelectorAll('input[type="radio"]');
+          const textInputs = question.querySelectorAll('input[type="text"]');
+          
+          let isAnswered = false;
+          
+          // Check radio buttons (MCQ and True/False)
+          if (radioInputs.length > 0) {
+            isAnswered = Array.from(radioInputs).some(radio => radio.checked);
+          }
+          
+          // Check text inputs
+          if (textInputs.length > 0) {
+            isAnswered = Array.from(textInputs).some(text => text.value.trim() !== '');
+          }
+          
+          if (!isAnswered) {
+            unansweredCount++;
+          }
+        });
+        
+        if (unansweredCount > 0) {
+          e.preventDefault();
+          alert(`Please answer all questions! You have ${unansweredCount} unanswered question(s).`);
+          return;
+        }
+        
+        if (!confirm('Are you sure you want to submit your answers? You cannot change them after submission.')) {
+          e.preventDefault();
+        }
+      });
+      
+      // Track progress
+      function updateProgress() {
+        const questions = form.querySelectorAll('.question');
+        const totalQuestions = questions.length;
+        let answeredQuestions = 0;
+        
+        questions.forEach(question => {
+          const radioInputs = question.querySelectorAll('input[type="radio"]');
+          const textInputs = question.querySelectorAll('input[type="text"]');
+          
+          let isAnswered = false;
+          
+          // Check radio buttons
+          if (radioInputs.length > 0) {
+            isAnswered = Array.from(radioInputs).some(radio => radio.checked);
+          }
+          
+          // Check text inputs
+          if (textInputs.length > 0) {
+            isAnswered = Array.from(textInputs).some(text => text.value.trim() !== '');
+          }
+          
+          if (isAnswered) {
+            answeredQuestions++;
+          }
+        });
+        
+        // Update progress bar
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const percentage = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
+        
+        if (progressFill) {
+          progressFill.style.width = percentage + '%';
+        }
+        
+        if (progressText) {
+          progressText.textContent = `${answeredQuestions} of ${totalQuestions} questions answered`;
+        }
+        
+        // Update submit button state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (answeredQuestions === totalQuestions && totalQuestions > 0) {
+          submitBtn.style.background = 'linear-gradient(135deg, #4facfe, #00f2fe)';
+          submitBtn.textContent = '🚀 Submit Answers (Ready!)';
+        } else {
+          submitBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          submitBtn.textContent = '🚀 Submit Answers';
+        }
+      }
+      
+      // Add event listeners to all inputs
+      const inputs = form.querySelectorAll('input[type="radio"], input[type="text"]');
+      inputs.forEach(input => {
+        input.addEventListener('change', updateProgress);
+        input.addEventListener('input', updateProgress);
+      });
+      
+      // Initial progress update
+      updateProgress();
+    });
+  </script>
 </body>
 </html>

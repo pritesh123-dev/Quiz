@@ -1,26 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Create Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Quiz - Quiz Management System</title>
   <link rel="stylesheet" href="/public/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>Create a New Quiz</h1>
-    <nav><a href="/">Back to home</a></nav>
+    <h1>✏️ Create a New Quiz</h1>
+    <nav><a href="/">🏠 Back to Home</a></nav>
   </header>
   <main>
-    <form id="quiz-form">
-      <div class="form-group">
-        <label for="quiz-title">Quiz Title</label>
-        <input type="text" id="quiz-title" required placeholder="Enter quiz title">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>📝 Quiz Details</h2>
+        <p>Fill in the details below to create your quiz</p>
       </div>
-      <div id="questions" class="questions-container"></div>
-      <button type="button" id="add-question" class="button">Add Question</button>
-      <button type="submit" class="button primary">Save Quiz</button>
-    </form>
-    <div id="message" class="message"></div>
+      <form id="quiz-form">
+        <div class="form-group">
+          <label for="quiz-title">🎯 Quiz Title</label>
+          <input type="text" id="quiz-title" required placeholder="Enter an engaging quiz title...">
+        </div>
+        
+        <div class="questions-section">
+          <h3>❓ Questions</h3>
+          <div id="questions" class="questions-container"></div>
+          <button type="button" id="add-question" class="button">➕ Add Question</button>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="button primary">💾 Save Quiz</button>
+          <button type="button" id="preview-quiz" class="button">👁️ Preview</button>
+        </div>
+      </form>
+      <div id="message" class="message"></div>
+    </div>
   </main>
   <script src="/public/admin.js"></script>
 </body>

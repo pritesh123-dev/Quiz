@@ -123,59 +123,91 @@
 
   form.addEventListener('submit', evt => {
     evt.preventDefault();
+    
+    // Show loading state
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '💾 Saving...';
+    submitBtn.disabled = true;
+    form.classList.add('loading');
+    
     const title = document.getElementById('quiz-title').value.trim();
     if (!title) {
-      alert('Please provide a quiz title');
+      showMessage('Please provide a quiz title', 'error');
+      resetSubmitButton();
       return;
     }
+    
     const questionBlocks = document.querySelectorAll('.question-block');
     const questions = [];
     let valid = true;
+    let errorMessage = '';
+    
     questionBlocks.forEach((block, idx) => {
       const type = block.querySelector('.q-type').value;
       const questionText = block.querySelector('.q-text').value.trim();
+      
       if (!questionText) {
-        alert(`Please provide text for question ${idx + 1}`);
+        errorMessage = `Please provide text for question ${idx + 1}`;
         valid = false;
         return;
       }
+      
       if (type === 'mcq') {
         const optionDivs = block.querySelectorAll('.option-input');
         const options = [];
         let answer = '';
+        
         optionDivs.forEach(div => {
           const optText = div.querySelector('.option-text').value.trim();
           const radio = div.querySelector('input[type=radio]');
-          options.push(optText);
-          if (radio.checked) answer = optText;
+          if (optText) {
+            options.push(optText);
+            if (radio.checked) answer = optText;
+          }
         });
+        
         if (options.length < 2) {
-          alert(`Question ${idx + 1} must have at least two options.`);
+          errorMessage = `Question ${idx + 1} must have at least two options.`;
           valid = false;
           return;
         }
         if (!answer) {
-          alert(`Please select the correct answer for question ${idx + 1}.`);
+          errorMessage = `Please select the correct answer for question ${idx + 1}.`;
           valid = false;
           return;
         }
         questions.push({ type: 'mcq', question: questionText, options, answer });
+        
       } else if (type === 'tf') {
         const select = block.querySelector('.tf-answer');
         const answer = select.value;
         questions.push({ type: 'tf', question: questionText, answer });
+        
       } else if (type === 'text') {
         const ansInput = block.querySelector('.text-answer');
         const answer = ansInput.value.trim();
         if (!answer) {
-          alert(`Please provide the correct answer for question ${idx + 1}.`);
+          errorMessage = `Please provide the correct answer for question ${idx + 1}.`;
           valid = false;
           return;
         }
         questions.push({ type: 'text', question: questionText, answer });
       }
     });
-    if (!valid) return;
+    
+    if (!valid) {
+      showMessage(errorMessage, 'error');
+      resetSubmitButton();
+      return;
+    }
+    
+    if (questions.length === 0) {
+      showMessage('Please add at least one question to your quiz', 'error');
+      resetSubmitButton();
+      return;
+    }
+    
     // Submit the quiz via fetch API
     fetch('/api/create-quiz', {
       method: 'POST',
@@ -185,19 +217,122 @@
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          messageDiv.textContent = `Quiz created successfully! You can take it here: ${window.location.origin}/quiz/${data.id}`;
+          showMessage(`🎉 Quiz created successfully! You can take it here: ${window.location.origin}/quiz/${data.id}`, 'success');
           // Reset the form
           form.reset();
           questionsContainer.innerHTML = '';
           questionCounter = 0;
           addQuestionBlock();
         } else {
-          messageDiv.textContent = 'Error creating quiz.';
+          showMessage('❌ Error creating quiz. Please try again.', 'error');
         }
       })
       .catch(err => {
         console.error(err);
-        messageDiv.textContent = 'Failed to create quiz.';
+        showMessage('❌ Failed to create quiz. Please check your connection and try again.', 'error');
+      })
+      .finally(() => {
+        resetSubmitButton();
       });
   });
+  
+  function resetSubmitButton() {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.textContent = '💾 Save Quiz';
+    submitBtn.disabled = false;
+    form.classList.remove('loading');
+  }
+  
+  function showMessage(text, type = 'info') {
+    messageDiv.textContent = text;
+    messageDiv.className = `message ${type}`;
+    messageDiv.style.display = 'block';
+    
+    // Auto-hide success messages after 5 seconds
+    if (type === 'success') {
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+  }
+  
+  // Add preview functionality
+  const previewBtn = document.getElementById('preview-quiz');
+  if (previewBtn) {
+    previewBtn.addEventListener('click', () => {
+      const title = document.getElementById('quiz-title').value.trim();
+      if (!title) {
+        showMessage('Please enter a quiz title first', 'error');
+        return;
+      }
+      
+      const questionBlocks = document.querySelectorAll('.question-block');
+      if (questionBlocks.length === 0) {
+        showMessage('Please add at least one question', 'error');
+        return;
+      }
+      
+      // Create a preview window
+      const previewWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+      let previewContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Preview: ${title}</title>
+          <link rel="stylesheet" href="/public/style.css">
+        </head>
+        <body>
+          <header>
+            <h1>👁️ Preview: ${title}</h1>
+            <nav><button onclick="window.close()">❌ Close Preview</button></nav>
+          </header>
+          <main>
+            <div class="quiz-intro">
+              <h2>📝 Quiz Preview</h2>
+              <p>This is how your quiz will look to users</p>
+            </div>
+            <div class="quiz-form">
+      `;
+      
+      questionBlocks.forEach((block, idx) => {
+        const type = block.querySelector('.q-type').value;
+        const questionText = block.querySelector('.q-text').value.trim();
+        
+        if (!questionText) return;
+        
+        previewContent += `<div class="question"><p><strong>Question ${idx + 1}:</strong> ${questionText}</p>`;
+        
+        if (type === 'mcq') {
+          const optionDivs = block.querySelectorAll('.option-input');
+          optionDivs.forEach(div => {
+            const optText = div.querySelector('.option-text').value.trim();
+            if (optText) {
+              previewContent += `<div class="option"><label><input type="radio" disabled> ${optText}</label></div>`;
+            }
+          });
+        } else if (type === 'tf') {
+          previewContent += `
+            <div class="option"><label><input type="radio" disabled> True</label></div>
+            <div class="option"><label><input type="radio" disabled> False</label></div>
+          `;
+        } else if (type === 'text') {
+          previewContent += `<input type="text" disabled placeholder="Your answer here...">`;
+        }
+        
+        previewContent += '</div>';
+      });
+      
+      previewContent += `
+            </div>
+          </main>
+        </body>
+        </html>
+      `;
+      
+      previewWindow.document.write(previewContent);
+      previewWindow.document.close();
+    });
+  }
 })();

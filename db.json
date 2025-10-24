@@ -28,6 +28,34 @@
           "id": "q3"
         }
       ]
+    },
+    {
+      "id": "quiz_1761301771170",
+      "title": "JavaScript",
+      "questions": [
+        {
+          "type": "mcq",
+          "question": "What is JavaScript?",
+          "options": [
+            "This is Programming Language.",
+            "This is a Scripting Language."
+          ],
+          "answer": "This is a Scripting Language.",
+          "id": "q1"
+        }
+      ]
+    },
+    {
+      "id": "quiz_1761303595154",
+      "title": "React",
+      "questions": [
+        {
+          "type": "tf",
+          "question": "Is React uses virtual Dom",
+          "answer": "true",
+          "id": "q1"
+        }
+      ]
     }
   ]
 }
