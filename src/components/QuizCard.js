@@ -31,3 +31,4 @@ const QuizCard = ({ quiz, onTakeQuiz }) => {
 };
 
 export default QuizCard;
+

@@ -20,3 +20,4 @@ const ProgressBar = ({ current, total, label = "questions answered" }) => {
 };
 
 export default ProgressBar;
+

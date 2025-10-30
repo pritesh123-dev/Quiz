@@ -56,6 +56,22 @@
           "id": "q1"
         }
       ]
+    },
+    {
+      "id": "quiz_1761800214034",
+      "title": "HTML",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "text",
+          "question": "What is HTML",
+          "options": [
+            "",
+            ""
+          ],
+          "answer": "HTML"
+        }
+      ]
     }
   ]
 }

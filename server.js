@@ -12,7 +12,7 @@ const url = require('url');
 const querystring = require('querystring');
 
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'db.json');
+const DATA_FILE = process.env.DATA_PATH || path.join(__dirname, 'db.json');
 
 // Helper to load quizzes from the JSON file
 function loadData() {

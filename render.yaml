@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: quiz-system
+    env: node
+    plan: free
+    autoDeploy: true
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_PATH
+        value: /data/db.json
+

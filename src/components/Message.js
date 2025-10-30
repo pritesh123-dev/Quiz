@@ -28,3 +28,4 @@ const Message = ({ message, type = 'info', autoHide = false, duration = 5000 }) 
 };
 
 export default Message;
+
