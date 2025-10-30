@@ -10,7 +10,7 @@
     "build:dev": "webpack --mode development"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "dependencies": {
     "react": "^18.2.0",
