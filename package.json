@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "webpack --mode production",
-    "build:dev": "webpack --mode development"
+    "build": "webpack-cli --mode production",
+    "build:dev": "webpack-cli --mode development"
   },
   "engines": {
     "node": "20.x"
