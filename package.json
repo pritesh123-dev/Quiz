@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "webpack-cli --mode production",
+    "build": "npx webpack --mode production",
     "build:dev": "webpack-cli --mode development"
   },
   "engines": {
