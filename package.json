@@ -6,9 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "node node_modules/.bin/webpack --mode production",
-    "build:dev": "node node_modules/.bin/webpack --mode development",
-    "postinstall": "npm run build"
+  "build": "webpack --mode production",
+  "build:dev": "webpack --mode development"
   },
   "engines": {
     "node": "20.x"
