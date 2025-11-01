@@ -27,7 +27,8 @@
     "css-loader": "^6.7.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.0",
-    "webpack": "^5.75.0"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.x"
   },
   "keywords": ["quiz", "react", "education", "assessment"],
   "author": "Quiz System Developer",
