@@ -1,13 +1,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/'
-  },
+module.exports = (env, argv) => {
+  const mode = argv && argv.mode ? argv.mode : process.env.NODE_ENV || 'production';
+  const isDev = mode === 'development';
+
+  return {
+    mode,
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js',
+      publicPath: '/'
+    },
   module: {
     rules: [
       {
@@ -26,22 +31,27 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      filename: 'index.html'
-    })
-  ],
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        filename: 'index.html'
+      })
+    ],
   resolve: {
     extensions: ['.js', '.jsx']
   },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
+    devtool: isDev ? 'eval-source-map' : 'source-map',
+    optimization: {
+      minimize: !isDev
     },
-    compress: true,
-    port: 3000,
-    historyApiFallback: true
-  }
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'dist'),
+      },
+      compress: true,
+      port: 3000,
+      historyApiFallback: true
+    }
+  };
 };
 
