@@ -14,13 +14,41 @@ const querystring = require('querystring');
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = process.env.DATA_PATH || path.join(__dirname, 'db.json');
 
+// Ensure data directory exists
+const dataDir = path.dirname(DATA_FILE);
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
 // Helper to load quizzes from the JSON file
 function loadData() {
   try {
+    if (!fs.existsSync(DATA_FILE)) {
+      // Initialize with sample data if file doesn't exist
+      const sampleData = {
+        quizzes: [
+          {
+            id: "quiz_sample",
+            title: "Sample Quiz",
+            questions: [
+              {
+                id: "q1",
+                type: "mcq",
+                question: "What is 2+2?",
+                options: ["3", "4", "5"],
+                answer: "4"
+              }
+            ]
+          }
+        ]
+      };
+      saveData(sampleData);
+      return sampleData;
+    }
     const data = fs.readFileSync(DATA_FILE, 'utf8');
     return JSON.parse(data);
   } catch (e) {
-    // If file doesn't exist or is invalid, start with an empty object
+    console.error('Error loading data:', e);
     return { quizzes: [] };
   }
 }

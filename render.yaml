@@ -4,18 +4,22 @@ services:
     env: node
     plan: free
     autoDeploy: true
-    buildCommand: npm install --include=dev && npm run build
+    buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /
     disk:
-      name: data
+      name: quiz-data
       mountPath: /data
       sizeGB: 1
     envVars:
-      - key: CI
-        value: true
-      - key: NPM_CONFIG_PRODUCTION
-        value: false
+      - key: NODE_ENV
+        value: production
       - key: DATA_PATH
         value: /data/db.json
+      - key: NPM_CONFIG_PRODUCTION
+        value: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /
 
